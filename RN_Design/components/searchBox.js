@@ -1,22 +1,43 @@
-import React from 'react';
-import {StyleSheet, TextInput, View,Button,Image,TouchableHighlight} from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, TextInput, View,Image,TouchableOpacity} from 'react-native';
+import Filters from './filters'
 
-const imagePath = require('../Icons/search_icon.png');
+export default class SearchBox extends Component{
 
-const SearchBox = () => (
+    constructor(props){
+        super();
+        this.state = {
+            imagePath: require('../Icons/search_icon.png'),
+            query: '',
+            search: () => (
+                fetch('https://api.stackexchange.com//2.2/search/advanced?order=desc&sort=activity&site=stackoverflow')
+                    .then(result => console.log(Filters))
+            ),
+        }
+    }
 
-    
-    <View style = {styles.searchStyle}>
-        <TextInput style = {styles.inputStyle} placeholder = 'Search...' placeholderTextColor = '#BEC4C6' numberOfLines = {1}>
-            
-        </TextInput>
+    render(){
+        return(
 
-        <TouchableHighlight style = {styles.buttonStyle}>
-            <Image source = {imagePath} style={{width: 10, height: 10}}></Image>
-        </TouchableHighlight>
+            <View style = {styles.searchStyle}>
         
-    </View>
-);
+                <TextInput style = {styles.inputStyle} placeholder = 'Search...' placeholderTextColor = '#BEC4C6' numberOfLines = {1}
+                        value = {this.props.text}
+                        onChangeText = {this.props.onChangeText} />
+        
+                <TouchableOpacity style = {styles.buttonStyle}
+                        activeOpacity = {0.8}
+                        onPress = {this.props.onClick}>
+                        
+                    <Image source = {this.state.imagePath} 
+                            style={styles.imageStyle}
+                            resizeMode = 'contain'
+                            resizeMethod = 'scale' />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+} 
 
 const styles = StyleSheet.create({
     inputStyle: {
@@ -33,6 +54,8 @@ const styles = StyleSheet.create({
     },
     buttonStyle: {
         flex: 1,
+        alignItems: 'center' ,
+        justifyContent: 'center',
         borderRadius: 5,
         margin: 2,
         backgroundColor: '#448AFF',
@@ -43,7 +66,11 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         flexDirection: 'row',
+    },
+    imageStyle: {
+        height: 45,
+        width: 45,
     }
 });
 
-export default SearchBox;
+//console.log(Dimensions.get('window'));
