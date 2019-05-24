@@ -7,10 +7,11 @@
  */
 
 import React, {Component} from 'react';
-import { StyleSheet, View} from 'react-native';
+import { StyleSheet, View, ScrollView} from 'react-native';
 import Header from './components/header'
 import SearchBox from './components/searchBox';
 import CustomPicker from './components/customPicker'
+import Card from './components/card'
 
 export default class App extends Component {
 
@@ -61,6 +62,9 @@ export default class App extends Component {
             <CustomPicker title = 'Sort by:' ukey = {this.sortKey} items = {this.sortList} style = {styles.picker1} selectedValue = {this.state.sort} onPickerChange = {this.onPickerChange} />
             <CustomPicker title = 'Order:' ukey = {this.orderKey} items = {this.orderList} style = {styles.picker2} selectedValue = {this.state.order} onPickerChange = {this.onPickerChange} />
         </View>
+        <ScrollView>
+          <Card questionTitle = "Kuchh bhi" questionBody = "kuchh bhikuchh bhikuchh bhikuchh bhikuchh bhikuchh bhikuchh bhikuchh bhikuchh bhikuchh bhikuchh bhi" voteCount = 'Votes : 5.2k' answerCount = 'Answers : 26'></Card>
+        </ScrollView>
       </View>
     );
   }

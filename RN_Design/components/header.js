@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'left',
         fontWeight: 'bold',
-        fontFamily: 'Comic Sans'
+        fontFamily: 'sens-serif-medium'
     },
     headerStyle: {
         backgroundColor: '#26a69a',
