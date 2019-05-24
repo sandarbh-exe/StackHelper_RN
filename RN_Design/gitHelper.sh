@@ -8,6 +8,7 @@ then
     git add .
     read -e -p 'Commit Message : ' commitMessage
     git commit -m "$commitMessage"
+    git status
     read -e -p 'Push? : (y/n) ' bool
     if [ "$bool" == "y" ]
     then
