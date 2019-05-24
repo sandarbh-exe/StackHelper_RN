@@ -1,20 +1,13 @@
 import React, {Component} from 'react';
 import {StyleSheet, TextInput, View,Image,TouchableOpacity} from 'react-native';
-import Filters from './filters'
 
 export default class SearchBox extends Component{
 
     constructor(props){
         super();
-        this.state = {
-            imagePath: require('../Icons/search_icon.png'),
-            query: '',
-            search: () => (
-                fetch('https://api.stackexchange.com//2.2/search/advanced?order=desc&sort=activity&site=stackoverflow')
-                    .then(result => console.log(Filters))
-            ),
-        }
     }
+
+    imagePath = require('../Icons/search_icon.png');
 
     render(){
         return(
@@ -22,14 +15,18 @@ export default class SearchBox extends Component{
             <View style = {styles.searchStyle}>
         
                 <TextInput style = {styles.inputStyle} placeholder = 'Search...' placeholderTextColor = '#BEC4C6' numberOfLines = {1}
-                        value = {this.props.text}
-                        onChangeText = {this.props.onChangeText} />
+                        value = {this.props.value}
+                        onChangeText = {this.props.onChangeText}
+                        autoCapitalize = 'none'
+                        autoCorrect = {false}
+                        blurOnSubmit = {true}
+                        editable = {this.props.isEditable} />
         
                 <TouchableOpacity style = {styles.buttonStyle}
                         activeOpacity = {0.8}
                         onPress = {this.props.onClick}>
                         
-                    <Image source = {this.state.imagePath} 
+                    <Image source = {this.imagePath} 
                             style={styles.imageStyle}
                             resizeMode = 'contain'
                             resizeMethod = 'scale' />
@@ -42,7 +39,7 @@ export default class SearchBox extends Component{
 const styles = StyleSheet.create({
     inputStyle: {
         flex: 3,
-        color: 'red',
+        color: '#1C1C1C',
         fontSize : 20,
         padding: 5,
         textAlign: 'left',
@@ -72,5 +69,3 @@ const styles = StyleSheet.create({
         width: 45,
     }
 });
-
-//console.log(Dimensions.get('window'));

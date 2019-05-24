@@ -2,24 +2,20 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View, Picker} from 'react-native';
 
 export default class CustomPicker extends Component{
+    
     constructor(props){
         super(props);
-        this.state = {
-            style: this.props.style,
-            title: this.props.title,
-            itemList: this.props.items,
-            key: 1,
-        }
     }
+    key = this.props.ukey;
 
     render(){
         return (
-            <View style = {this.state.style}>
+            <View style = {this.props.style}>
         
-                <Text style = {styles.textStyle}>{this.state.title}</Text>
-                <Picker style = {styles.pickerStyle} itemStyle = {styles.itemStyle} selectedValue = {this.props.selectedValue} onValueChange = {this.props.changeValue} >
+                <Text style = {styles.textStyle}>{this.props.title}</Text>
+                <Picker style = {styles.pickerStyle} itemStyle = {styles.itemStyle} selectedValue = {this.props.selectedValue} onValueChange = {this.props.onPickerChange} >
 
-                    {this.state.itemList.map((item) => <Picker.Item key = {this.state.key+1} label = {item} value = {item} />)}
+                    {this.props.items.map((item) => <Picker.Item key = {this.key++} label = {item} value = {item} />)}
 
                 </Picker>
         
@@ -47,5 +43,3 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
 });
-
-//console.log(Dimensions.get('window'));
