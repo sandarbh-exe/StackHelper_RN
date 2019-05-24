@@ -6,11 +6,11 @@ read -p 'OK? (y/n) ' bool
 if [ "$bool" == "y" ]
 then
     git add .
-    read -p 'Commit Message : ' commitMessage
-    git commit -m $commitMessage
-    read -p 'Push? : (y/n) ' bool
-    # if[ $bool == 'y' ]
-    # then
-    #     git push
-    # fi
+    read -e -p 'Commit Message : ' commitMessage
+    git commit -m "$commitMessage"
+    read -e -p 'Push? : (y/n) ' bool
+    if [ "$bool" == "y" ]
+    then
+        git push
+    fi
 fi
