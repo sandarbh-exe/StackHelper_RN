@@ -22,7 +22,7 @@ export default class App extends Component {
       order: 'desc',
       query: '',
       isEditable: true,
-      posts: {},
+      posts: [],
     }
   }
 
@@ -47,7 +47,8 @@ export default class App extends Component {
             return response
           console.log('Network Error.')
         })
-        .then(result => this.setState({posts: result.json().items}))
+        .then(response => response.json())
+        .then(result => this.setState({posts: result.items}))
         .then(() => console.log(this.state.posts))
         .catch((error) => console.log(error));
   };
@@ -57,23 +58,16 @@ export default class App extends Component {
   );
 
   getCreationDate = (val) => {
-    var date = new Date(val*1000).toDateString;
-    var formatOptions = {
-      hour12: false,
-      month: 'short',
-      day: '2-digit',
-      year: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    }
-    //var dateString = new Intl.DateTimeFormat('default',formatOptions).format(date);
-    console.log(date);
-    
+    var date = this.moment(val,'X');
+    date.utcOffset(0);
+    var formattedDate = date.format("MMM DD YY HH mm").split(' ');
+    console.log(formattedDate);
 
+    return (`asked ${formattedDate[0]} ${formattedDate[1]}'${formattedDate[2]} at ${formattedDate[3]}:${formattedDate[4]}`);
   }
 
-  getViewCount = () => {
-
+  getViewCount = (val) => {
+    return `${val} views`
   }
 
   render() {
@@ -87,14 +81,13 @@ export default class App extends Component {
             <CustomPicker title = 'Order:' ukey = {this.orderKey} items = {this.orderList} style = {styles.picker2} selectedValue = {this.state.order} onPickerChange = {this.onPickerChange} />
         </View>
         <ScrollView>
-          {/*{this.state.posts.map(
-            (post) => (
-              <Card questionTitle = {post.title} questionBody = {post.body}
-                voteCount = {`Votes : ${post.score}`} answerCount = {`Answers : ${post.answer_count}`}
-                viewCount = {this.getViewCount()} creationDate = {this.getCreationDate()}"asked Sep 17'08 at 09:48"></Card>
-            )
-            )}*/}
-            {this.getCreationDate(1370506005)}
+        {this.state.posts.map(
+          (post) => (
+            <Card questionTitle = {post.title} questionBody = {post.body}
+              voteCount = {`Votes : ${post.score}`} answerCount = {`Answers : ${post.answer_count}`}
+              viewCount = {this.getViewCount(post.view_count)} creationDate = {this.getCreationDate(post.creation_date)}></Card>
+          )
+        )}
           
         </ScrollView>
       </View>
