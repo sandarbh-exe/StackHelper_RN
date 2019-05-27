@@ -22,6 +22,7 @@ export default class App extends Component {
       order: 'desc',
       query: '',
       isEditable: true,
+      posts: {},
     }
   }
 
@@ -30,6 +31,8 @@ export default class App extends Component {
   sortKey = 0x41D;
   orderKey = 0x3E9;
 
+  moment = require('moment');
+
   onChangeText = (text)=>(
     this.setState({query: text})
   );
@@ -37,20 +40,41 @@ export default class App extends Component {
   search = () => {
     this.setState({isEditable: false});
 
-    return fetch(`https://api.stackexchange.com/2.2/search/advanced?order=${this.state.order}&sort=${this.state.sort}&q=${this.state.query}&site=stackoverflow`)
+    return fetch(`https://api.stackexchange.com/2.2/search/advanced?order=${this.state.order}&sort=${this.state.sort}&q=${this.state.query}&site=stackoverflow&filter=!9Z(-wwK0y`)
         .then(response => {
           this.setState({isEditable: true})
           if(response.ok)
             return response
           console.log('Network Error.')
         })
-        .then(result => console.log(result.json())
-        ).catch((error) => console.log(error));
+        .then(result => this.setState({posts: result.json().items}))
+        .then(() => console.log(this.state.posts))
+        .catch((error) => console.log(error));
   };
 
   onPickerChange = (label) => (
     (this.sortList.indexOf(label) != -1) ? this.setState({sort: label}) : this.setState({order: label})
   );
+
+  getCreationDate = (val) => {
+    var date = new Date(val*1000).toDateString;
+    var formatOptions = {
+      hour12: false,
+      month: 'short',
+      day: '2-digit',
+      year: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    }
+    //var dateString = new Intl.DateTimeFormat('default',formatOptions).format(date);
+    console.log(date);
+    
+
+  }
+
+  getViewCount = () => {
+
+  }
 
   render() {
     return (
@@ -63,7 +87,15 @@ export default class App extends Component {
             <CustomPicker title = 'Order:' ukey = {this.orderKey} items = {this.orderList} style = {styles.picker2} selectedValue = {this.state.order} onPickerChange = {this.onPickerChange} />
         </View>
         <ScrollView>
-          <Card questionTitle = "Kuchh bhi" questionBody = "kuchh bhikuchh bhikuchh bhikuchh bhikuchh bhikuchh bhikuchh bhikuchh bhikuchh bhikuchh bhikuchh bhi" voteCount = 'Votes : 5.2k' answerCount = 'Answers : 26'></Card>
+          {/*{this.state.posts.map(
+            (post) => (
+              <Card questionTitle = {post.title} questionBody = {post.body}
+                voteCount = {`Votes : ${post.score}`} answerCount = {`Answers : ${post.answer_count}`}
+                viewCount = {this.getViewCount()} creationDate = {this.getCreationDate()}"asked Sep 17'08 at 09:48"></Card>
+            )
+            )}*/}
+            {this.getCreationDate(1370506005)}
+          
         </ScrollView>
       </View>
     );
@@ -83,6 +115,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    elevation: 5,
   },
   picker1: {
         flex: 1.3,

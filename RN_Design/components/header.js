@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         fontFamily: 'sens-serif-medium'
     },
     headerStyle: {
-        backgroundColor: '#26a69a',
+        backgroundColor: '#527271',
         paddingLeft: 10,
     }
 });
