@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Linking, TouchableOpacity} from 'react-native';
+
 import User from './userDetails'
 
 export default class Card extends Component{
@@ -28,14 +29,21 @@ export default class Card extends Component{
                 
                 <View style = {styles.bottomStyle}>
                     <Text style = {styles.tagsTitle}> tags: </Text>
-                    <View style = {styles.tagStyle}>    
-                        <Text style = {styles.tags}> android </Text>
-                        <Text style = {styles.tags}> java </Text>
-                        <Text style = {styles.tags}> c++ </Text>
-                        <Text style = {styles.tags}> html </Text>
+                    <View style = {styles.tagStyle}>
+                        {this.props.tags.map(
+                            (tag,index) => (
+                                <Text key = {index} style = {styles.tags}>{tag}</Text>
+                            )
+                        )}
                     </View>
 
-                    <User username = "hehehehe" reputation = "23.5k">{this.props.answerCount}</User>
+                    <TouchableOpacity style = {{flex: 1, justifyContent: 'flex-end'}}
+                        activeOpacity = {0.6}
+                        onPress = {() => (link = this.props.user.link) ? Linking.openURL(link).catch((err) => console.log(err)) : console.log('[Toast] User does not exist!') }>
+
+                        <User username = {this.props.user.display_name} reputation = {this.props.user.reputation} avatar = {this.props.user.profile_image} />
+                    </TouchableOpacity>
+                    
                         
                 </View>
 
@@ -105,11 +113,14 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
+        marginRight: 5,
+        alignItems: 'flex-start'
     },
     tags: {
         fontSize : 15,
         marginLeft: 2,
         marginBottom: 2,
+        padding: 2,
         color: '#085394',
         textAlign: 'left',
         fontWeight: 'bold',

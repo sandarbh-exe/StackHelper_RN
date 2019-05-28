@@ -6,19 +6,41 @@ export default class User extends Component{
     constructor(props){
         super(props);
     }
-    anonymousImageURL = "https://www.timeshighereducation.com/sites/default/files/byline_photos/anonymous-user-gravatar_0.png";
+    anonymousAvatarURL = "https://www.timeshighereducation.com/sites/default/files/byline_photos/anonymous-user-gravatar_0.png";
+
+    valueFormatter = (val) => {
+        val *= 1.0
+        suffix = ''
+        if(Math.abs(val) > 1000000){
+          val /= 1000000
+          suffix = 'M'
+        }
+        else if(Math.abs(val) > 1000){
+          val /= 1000
+          suffix = 'k'
+        }
+        format = val.toString();
+        pos = format.indexOf('.');
+    
+        if(format.charAt(pos+1)=='0')
+            format = format.substring(0,pos);
+    
+        else format = format.substring(0,format.indexOf('.')+2);
+    
+        return (format+suffix)
+      }
 
     render(){
         return(
             <View style = {styles.userStyle}>
                 <View style = {styles.avatarStyle}>
-                    <Image source = {{uri: this.anonymousImageURL} } style = {styles.avatar} resizeMode = 'contain'
-                    resizeMethod = 'scale'></Image>
+                    <Image source = {{uri: (avatarURL = this.props.avatar) ? avatarURL : this.anonymousAvatarURL } }
+                            style = {styles.avatar} resizeMode = 'contain' resizeMethod = 'scale' />
                 </View>
                     
                 <View style = {styles.details}>
                     <Text style = {[styles.detailsText,{fontSize : 18}]} numberOfLines = {1} ellipsizeMode = 'tail'>{this.props.username}</Text>
-                    <Text style = {[styles.detailsText,{fontWeight: 'bold'}]}>{this.props.reputation}</Text>
+                    <Text style = {[styles.detailsText,{fontWeight: 'bold'}]}>{this.valueFormatter(this.props.reputation)}</Text>
                 </View>
 
             </View>
@@ -29,7 +51,7 @@ export default class User extends Component{
 const styles = StyleSheet.create({
 
     userStyle: {
-        flex: 1,
+        height: 60,
         flexDirection: 'row',
         borderRadius: 5,
         backgroundColor: '#9fc5f8',

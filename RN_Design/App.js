@@ -7,7 +7,8 @@
  */
 
 import React, {Component} from 'react';
-import { StyleSheet, View, ScrollView} from 'react-native';
+import { StyleSheet, View, ScrollView, TouchableOpacity, Linking} from 'react-native';
+
 import Header from './components/header'
 import SearchBox from './components/searchBox';
 import CustomPicker from './components/customPicker'
@@ -20,7 +21,7 @@ export default class App extends Component {
     this.state = {
       sort: 'relevance',
       order: 'desc',
-      query: '',
+      query: 'input',
       isEditable: true,
       posts: [],
     }
@@ -30,6 +31,7 @@ export default class App extends Component {
   orderList = ['desc','asc'];
   sortKey = 0x41D;
   orderKey = 0x3E9;
+  tagsHTMLregex = /(<([^>]+)>)/ig;
 
   moment = require('moment');
 
@@ -49,7 +51,6 @@ export default class App extends Component {
         })
         .then(response => response.json())
         .then(result => this.setState({posts: result.items}))
-        .then(() => console.log(this.state.posts))
         .catch((error) => console.log(error));
   };
 
@@ -61,14 +62,40 @@ export default class App extends Component {
     var date = this.moment(val,'X');
     date.utcOffset(0);
     var formattedDate = date.format("MMM DD YY HH mm").split(' ');
-    console.log(formattedDate);
 
     return (`asked ${formattedDate[0]} ${formattedDate[1]}'${formattedDate[2]} at ${formattedDate[3]}:${formattedDate[4]}`);
   }
 
-  getViewCount = (val) => {
-    return `${val} views`
+  valueFormatter = (val) => {
+    val *= 1.0
+    suffix = ''
+    if(Math.abs(val) > 1000000){
+      val /= 1000000
+      suffix = 'M'
+    }
+    else if(Math.abs(val) > 1000){
+      val /= 1000
+      suffix = 'k'
+    }
+    format = val.toString();
+    pos = format.indexOf('.');
+
+    if(format.charAt(pos+1)=='0')
+        format = format.substring(0,pos);
+
+    else format = format.substring(0,format.indexOf('.')+2);
+
+    return (format+suffix)
   }
+
+  getBodyText = (text) => (
+    text.replace(this.tagsHTMLregex,'')
+  )
+
+  onCardClick = (link) => (
+    console.log(link)
+    
+  )
 
   render() {
     return (
@@ -83,9 +110,16 @@ export default class App extends Component {
         <ScrollView>
         {this.state.posts.map(
           (post) => (
-            <Card questionTitle = {post.title} questionBody = {post.body}
-              voteCount = {`Votes : ${post.score}`} answerCount = {`Answers : ${post.answer_count}`}
-              viewCount = {this.getViewCount(post.view_count)} creationDate = {this.getCreationDate(post.creation_date)}></Card>
+            <TouchableOpacity key = {post.question_id}
+                        activeOpacity = {0.8}
+                        onPress = {() => Linking.openURL(post.link).catch((err) => console.log(err))}>
+
+                <Card questionTitle = {post.title} questionBody = {this.getBodyText(post.body)}
+                      voteCount = {`Votes : ${post.score}`} answerCount = {`Answers : ${post.answer_count}`}
+                      tags = {post.tags} user = {post.owner} formatter = {this.valueFormatter()}
+                      viewCount = {`${this.valueFormatter(post.view_count)} views`} creationDate = {this.getCreationDate(post.creation_date)} />
+
+            </TouchableOpacity>
           )
         )}
           
