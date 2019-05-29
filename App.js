@@ -16,6 +16,8 @@ import SearchBox from './app/components/searchBox';
 import CustomPicker from './app/components/customPicker'
 import Card from './app/components/card'
 
+import reducers from './app/reducers'
+
 export default class App extends Component {
 
   constructor(){
@@ -101,32 +103,35 @@ export default class App extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Header title = "StackHelper"/>
-        <SearchBox onChangeText = {this.onChangeText} value = {this.state.query} onClick = {this.search} isEditable = {this.state.isEditable} />
+      <Provider store = {createStore(reducers)}>
+      
+        <View style={styles.container}>
+          <Header title = "StackHelper"/>
+          <SearchBox onChangeText = {this.onChangeText} value = {this.state.query} onClick = {this.search} isEditable = {this.state.isEditable} />
 
-        <View style = {styles.filtersStyle}>
-            <CustomPicker title = 'Sort by:' ukey = {this.sortKey} items = {this.sortList} style = {styles.picker1} selectedValue = {this.state.sort} onPickerChange = {this.onPickerChange} />
-            <CustomPicker title = 'Order:' ukey = {this.orderKey} items = {this.orderList} style = {styles.picker2} selectedValue = {this.state.order} onPickerChange = {this.onPickerChange} />
+          <View style = {styles.filtersStyle}>
+              <CustomPicker title = 'Sort by:' ukey = {this.sortKey} items = {this.sortList} style = {styles.picker1} selectedValue = {this.state.sort} onPickerChange = {this.onPickerChange} />
+              <CustomPicker title = 'Order:' ukey = {this.orderKey} items = {this.orderList} style = {styles.picker2} selectedValue = {this.state.order} onPickerChange = {this.onPickerChange} />
+          </View>
+          <ScrollView>
+            {this.state.posts.map(
+              (post) => (
+                <TouchableOpacity key = {post.question_id}
+                            activeOpacity = {0.8}
+                            onPress = {() => Linking.openURL(post.link).catch((err) => console.log(err))}>
+
+                    <Card questionTitle = {post.title} questionBody = {this.getBodyText(post.body)}
+                          voteCount = {`Votes : ${post.score}`} answerCount = {`Answers : ${post.answer_count}`}
+                          tags = {post.tags} user = {post.owner} formatter = {this.valueFormatter()}
+                          viewCount = {`${this.valueFormatter(post.view_count)} views`} creationDate = {this.getCreationDate(post.creation_date)} />
+
+                </TouchableOpacity>
+              )
+            )}
+          </ScrollView>
         </View>
-        <ScrollView>
-        {this.state.posts.map(
-          (post) => (
-            <TouchableOpacity key = {post.question_id}
-                        activeOpacity = {0.8}
-                        onPress = {() => Linking.openURL(post.link).catch((err) => console.log(err))}>
-
-                <Card questionTitle = {post.title} questionBody = {this.getBodyText(post.body)}
-                      voteCount = {`Votes : ${post.score}`} answerCount = {`Answers : ${post.answer_count}`}
-                      tags = {post.tags} user = {post.owner} formatter = {this.valueFormatter()}
-                      viewCount = {`${this.valueFormatter(post.view_count)} views`} creationDate = {this.getCreationDate(post.creation_date)} />
-
-            </TouchableOpacity>
-          )
-        )}
-          
-        </ScrollView>
-      </View>
+      
+      </Provider>
     );
   }
 }
