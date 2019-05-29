@@ -5,15 +5,12 @@ export default class Header extends Component{
 
     constructor(props){
         super(props);
-        this.state = {
-            headerTitle: this.props.title,
-        }
     }
     
     render(){
         return(
             <View style = {styles.headerStyle}>
-                <Text style = {styles.textStyle}>{this.state.headerTitle}</Text>
+                <Text style = {styles.textStyle}>{this.props.title}</Text>
             </View>
         );
     }

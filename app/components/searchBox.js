@@ -7,7 +7,7 @@ export default class SearchBox extends Component{
         super();
     }
 
-    imagePath = require('../Icons/search_icon.png');
+    imagePath = require('../icons/search_icon.png');
 
     render(){
         return(

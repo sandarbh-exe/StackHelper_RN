@@ -8,11 +8,13 @@
 
 import React, {Component} from 'react';
 import { StyleSheet, View, ScrollView, TouchableOpacity, Linking} from 'react-native';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
-import Header from './components/header'
-import SearchBox from './components/searchBox';
-import CustomPicker from './components/customPicker'
-import Card from './components/card'
+import Header from './app/components/header'
+import SearchBox from './app/components/searchBox';
+import CustomPicker from './app/components/customPicker'
+import Card from './app/components/card'
 
 export default class App extends Component {
 
