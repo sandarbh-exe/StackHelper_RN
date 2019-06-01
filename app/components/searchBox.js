@@ -1,22 +1,29 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import {StyleSheet, TextInput, View,Image,TouchableOpacity} from 'react-native';
 
-export default class SearchBox extends Component{
+import * as actions from '../actions'
 
-    constructor(props){
-        super();
+class SearchBox extends Component{
+
+    onChangeText = (text) => {
+        this.props.updateQuery(text);
     }
 
-    imagePath = require('../icons/search_icon.png');
+    onClick = () => {
+        const {sort, order, value} = this.props;
+        this.props.fetchPosts(sort, order, value);
+    }
 
     render(){
+        const imagePath = require('../icons/search_icon.png');
         return(
 
             <View style = {styles.searchStyle}>
         
                 <TextInput style = {styles.inputStyle} placeholder = 'Search...' placeholderTextColor = '#BEC4C6' numberOfLines = {1}
                         value = {this.props.value}
-                        onChangeText = {this.props.onChangeText}
+                        onChangeText = {this.onChangeText}
                         autoCapitalize = 'none'
                         autoCorrect = {false}
                         blurOnSubmit = {true}
@@ -24,9 +31,9 @@ export default class SearchBox extends Component{
         
                 <TouchableOpacity style = {styles.buttonStyle}
                         activeOpacity = {0.8}
-                        onPress = {this.props.onClick}>
+                        onPress = {this.onClick}>
                         
-                    <Image source = {this.imagePath} 
+                    <Image source = {imagePath} 
                             style={styles.imageStyle}
                             resizeMode = 'contain'
                             resizeMethod = 'scale' />
@@ -69,3 +76,12 @@ const styles = StyleSheet.create({
         width: 45,
     }
 });
+
+const mapStateToProps = state => ({
+    order: state.filters.order,
+    sort: state.filters.sort,
+    value: state.query,
+    isEditable: !(state.isLoading)
+})
+
+export default connect(mapStateToProps, {updateQuery, setLoadingStatus, fetchPosts})(SearchBox);

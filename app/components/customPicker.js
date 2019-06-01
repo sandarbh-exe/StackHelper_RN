@@ -1,14 +1,20 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, Picker} from 'react-native';
+import { connect } from 'react-redux';
 
-export default class CustomPicker extends Component{
+class CustomPicker extends Component{
     
     constructor(props){
         super(props);
     }
-    key = this.props.ukey;
-
+    // key = 0x41D;
+    // itemList = [
+    //     ['relevance', 'votes', 'activity', 'creation'],
+    //     ['desc','asc']
+    // ]
+    
     render(){
+        var items = items[this.props.itemsID];
         return (
             <View style = {this.props.style}>
         
@@ -43,3 +49,9 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
 });
+
+const mapStateToProps = state => ({
+    filters: state.filters
+})
+
+export default connect(mapStateToProps)(CustomPicker)

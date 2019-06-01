@@ -8,8 +8,9 @@
 
 import React, {Component} from 'react';
 import { StyleSheet, View, ScrollView, TouchableOpacity, Linking} from 'react-native';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import ReduxThunk from 'redux-thunk' 
 
 import Header from './app/components/header'
 import SearchBox from './app/components/searchBox';
@@ -102,16 +103,18 @@ export default class App extends Component {
   )
 
   render() {
+    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
+
     return (
-      <Provider store = {createStore(reducers)}>
+      <Provider store = {store}>
       
         <View style={styles.container}>
           <Header title = "StackHelper"/>
-          <SearchBox onChangeText = {this.onChangeText} value = {this.state.query} onClick = {this.search} isEditable = {this.state.isEditable} />
+          <SearchBox />
 
           <View style = {styles.filtersStyle}>
-              <CustomPicker title = 'Sort by:' ukey = {this.sortKey} items = {this.sortList} style = {styles.picker1} selectedValue = {this.state.sort} onPickerChange = {this.onPickerChange} />
-              <CustomPicker title = 'Order:' ukey = {this.orderKey} items = {this.orderList} style = {styles.picker2} selectedValue = {this.state.order} onPickerChange = {this.onPickerChange} />
+              <CustomPicker title = 'Sort by:' type = 'sort' ukey = {this.sortKey} style = {styles.picker1} selectedValue = {this.state.sort} onPickerChange = {this.onPickerChange} />
+              <CustomPicker title = 'Order:' type= 'order' ukey = {this.orderKey} style = {styles.picker2} selectedValue = {this.state.order} onPickerChange = {this.onPickerChange} />
           </View>
           <ScrollView>
             {this.state.posts.map(
@@ -152,17 +155,18 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   picker1: {
-        flex: 1.3,
-        marginRight: 2,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    picker2: {
-        flex: 1,
-        marginRight: 2,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
+    flex: 1.3,
+    marginRight: 2,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  picker2: {
+      flex: 1,
+      marginRight: 2,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
+
 });
