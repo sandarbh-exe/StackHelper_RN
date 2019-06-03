@@ -2,17 +2,19 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import {StyleSheet, TextInput, View,Image,TouchableOpacity} from 'react-native';
 
-import * as actions from '../actions'
+import {updateQuery, fetchPosts, setLoadingStatus} from '../actions'
 
 class SearchBox extends Component{
 
     onChangeText = (text) => {
-        this.props.actions.updateQuery(text);
+        this.props.updateQuery(text);
     }
 
     onClick = () => {
         const {sort, order, value} = this.props;
-        this.props.actions.fetchPosts(sort, order, value);
+        this.props.setLoadingStatus(true);
+        this.props.fetchPosts(sort, order, value);
+        this.props.setLoadingStatus(false);
     }
 
     render(){
@@ -84,4 +86,4 @@ const mapStateToProps = state => ({
     isEditable: !(state.isLoading)
 })
 
-export default connect(mapStateToProps, actions)(SearchBox);
+export default connect(mapStateToProps, {updateQuery, fetchPosts, setLoadingStatus})(SearchBox);

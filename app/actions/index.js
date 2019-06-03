@@ -1,9 +1,11 @@
 import * as actionTypes from './actionTypes'
 
-export const updateSort = (sortValue) => ({
-    type: actionTypes.ACTION_UPDATE_SORT,
-    payload: sortValue
-})
+export const updateSort = (sortValue) => {
+    console.log(sortValue);
+    
+    return {type: actionTypes.ACTION_UPDATE_SORT,
+    payload: sortValue}
+}
 
 export const updateOrder = (orderValue) => ({
     type: actionTypes.ACTION_UPDATE_ORDER,

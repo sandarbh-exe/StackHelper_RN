@@ -3,8 +3,6 @@ import {StyleSheet, Text, View, Picker} from 'react-native';
 import { connect } from 'react-redux';
 import {updateOrder,updateSort} from '../actions'
 
-let type = '';
-
 class CustomPicker extends Component{
     
     constructor(props){
@@ -21,9 +19,6 @@ class CustomPicker extends Component{
     }
     
     render(){
-        type = this.props.type;
-        console.log(this.props);
-        
         return (
             <View style = {this.props.style}>
         
@@ -59,13 +54,12 @@ const styles = StyleSheet.create({
     },
 });
 
-const mapStateToProps = state => { 
+const mapStateToProps = (state,ownProps) => { 
     var value;
-    switch(type){
+    switch(ownProps.type){
         case 'sort' : value = state.filters.sort;break;
         case 'order' : value = state.filters.order;break;
     }
-    console.log(state);
     
     return {selectedValue: value}
 }
