@@ -113,8 +113,8 @@ export default class App extends Component {
           <SearchBox />
 
           <View style = {styles.filtersStyle}>
-              <CustomPicker title = 'Sort by:' type = 'sort' ukey = {this.sortKey} style = {styles.picker1} selectedValue = {this.state.sort} onPickerChange = {this.onPickerChange} />
-              <CustomPicker title = 'Order:' type= 'order' ukey = {this.orderKey} style = {styles.picker2} selectedValue = {this.state.order} onPickerChange = {this.onPickerChange} />
+              <CustomPicker title = 'Sort by:' type = 'sort' items = {this.sortList} style = {styles.picker1} />
+              <CustomPicker title = 'Order:' type = 'order' items = {this.orderList} style = {styles.picker2} />
           </View>
           <ScrollView>
             {this.state.posts.map(

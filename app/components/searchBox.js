@@ -7,12 +7,12 @@ import * as actions from '../actions'
 class SearchBox extends Component{
 
     onChangeText = (text) => {
-        this.props.updateQuery(text);
+        this.props.actions.updateQuery(text);
     }
 
     onClick = () => {
         const {sort, order, value} = this.props;
-        this.props.fetchPosts(sort, order, value);
+        this.props.actions.fetchPosts(sort, order, value);
     }
 
     render(){
@@ -84,4 +84,4 @@ const mapStateToProps = state => ({
     isEditable: !(state.isLoading)
 })
 
-export default connect(mapStateToProps, {updateQuery, setLoadingStatus, fetchPosts})(SearchBox);
+export default connect(mapStateToProps, actions)(SearchBox);

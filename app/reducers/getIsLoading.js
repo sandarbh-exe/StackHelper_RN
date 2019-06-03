@@ -1,6 +1,6 @@
 import { ACTION_SET_LOADING_STATUS } from '../actions/actionTypes'
 
-const INITIAL_STATE = {isLoading: false}
+const INITIAL_STATE = {isLoading: true}
 
 export default getIsLoading = (state = INITIAL_STATE, action) => {
 
